@@ -1,0 +1,347 @@
+<?php
+/** {license_text}  */
+class Open_Gallery_Helper_Item_Video
+    extends Open_Gallery_Helper_Item_Abstract
+{
+    const VIDEO_TYPE_YOUTUBE  = 'youtube';
+    const VIDEO_TYPE_FILE     = 'file';
+    const VIDEO_TYPE_EMBEDDED = 'embedded';
+
+    protected $_allowedFormats = array('flv', 'mp4', 'mov', 'f4v', '3gp', '3g2');
+
+    protected $_videoWidth  = 624;
+    protected $_videoHeight = 450;
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @return array
+     */
+    public function getAllowedFormats(Open_Gallery_Model_Item $item = null)
+    {
+        return $this->_allowedFormats;
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @return array
+     */
+    public function getAvailableTypes(Open_Gallery_Model_Item $item = null)
+    {
+        return array (
+            self::VIDEO_TYPE_YOUTUBE => $this->__('YouTube Video'),
+            self::VIDEO_TYPE_FILE    => $this->__('Uploaded File'),
+            self::VIDEO_TYPE_EMBEDDED    => $this->__('Embed Code'),
+        );
+    }
+
+    /**
+     * @return int
+     */
+    public function getVideoWidth()
+    {
+        return $this->_videoWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVideoHeight()
+    {
+        return$this->_videoHeight;
+    }
+
+    /**
+     * @param $value
+     * @param bool $forceDownload
+     * @return string
+     */
+    public function getYouTubeImage($value, $forceDownload = false)
+    {
+        $baseDir   = Mage::getBaseDir('media');
+        $localDir  = 'video' . DS . 'youtube';
+        if (is_dir($localDir)) {
+            mkdir($localDir, 0777, true);
+        }
+        $fileName  = $value . '-0.jpg';
+        $absPath = $baseDir . DS . $localDir  . DS . $fileName;
+
+        if ($forceDownload || !is_file($absPath)) {
+            try {
+                $url       = sprintf('http://img.youtube.com/vi/%s/0.jpg', $value);
+                $client    = new Zend_Http_Client($url);
+                $response  = $client->request(Zend_Http_Client::GET);
+                if (!is_dir($baseDir . DS . $localDir)) {
+                    mkdir($baseDir . DS . $localDir, 0777, true);
+                }
+                file_put_contents($absPath, $response->getBody());
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+        }
+
+        return $localDir  . DS . $fileName;
+    }
+
+    /**
+     * @param string $imagePath
+     * @param int|null $width
+     * @param int|null $height
+     * @return string
+     */
+    public function getImageUrl($imagePath, $width = null, $height = null)
+    {
+        $mediaDir = Mage::getBaseDir('media');
+        $cacheDir = implode('/', array('video', 'image', 'cache'));
+        $path     = $mediaDir . DS .$cacheDir;
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+        $baseFileName = $imagePath;
+        $fileName = $width . '-' . $height . '-' . basename($baseFileName);
+        $filePath = $path . DS . $fileName;
+        if (!is_file($filePath)) {
+            $imageAbsPath = $mediaDir . DS . $baseFileName;
+            if (!is_file($imageAbsPath)) {
+                $imageAbsPath = Mage::getDesign()->getSkinBaseDir() . 'images' . DS . 'catalog' . DS .'product' . DS .'placeholder' . DS . 'small_image.jpg';
+                if (!is_file($imageAbsPath)) {
+                    $imageAbsPath = Mage::getDesign()->getSkinBaseDir(array('_package' => 'base', '_theme' => 'default')) . DS . 'images' . DS . 'catalog' . DS .'product' . DS .'placeholder' . DS . 'small_image.jpg';
+                }
+            }
+            $image = new Varien_Image($imageAbsPath);
+            $image->keepAspectRatio(true);
+            $image->keepFrame(true);
+            $image->constrainOnly(true);
+            $image->backgroundColor(array(0,0,0));
+            if ($width) {
+                $image->resize(intval($width), $height);
+            }
+            $image->save($path, $fileName);
+        }
+        $url = Mage::getBaseUrl('media') . $cacheDir . '/' . $fileName;
+        return $url;
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @param int|null $width
+     * @param int|null $height
+     * @return string
+     */
+    public function getVideoHtml(Open_Gallery_Model_Item $item, $width = null, $height = null)
+    {
+        $html   = '';
+        $width  = ($width  > 0 ? intval($width)  : $this->getVideoWidth());
+        $height = ($height > 0 ? intval($height) : $this->getVideoHeight());;
+        switch ($item->getType()) {
+            case self::VIDEO_TYPE_EMBEDDED:
+                $html = $item->getData('value');
+                $html = preg_replace('/width\=[\"\']{0,1}\d+[\"\']{0,1}/si',  sprintf('width="%d"', $width), $html);
+                $html = preg_replace('/height\=[\"\']{0,1}\d+[\"\']{0,1}/si', sprintf('height="%d"', $height), $html);
+                break;
+            case self::VIDEO_TYPE_FILE:
+                $html     = '<div id="container">'. $this->__('Loading the player ...') .'</div>'
+                    . '<script type="text/javascript">'
+                    . 'jwplayer("container").setup({'
+                    . 'flashplayer: "' . $this->getPlayerUtl() . '",'
+                    . 'file: "'  . $this->getVideoFileUrl($item) .'",'
+                    . 'width: "'  . $width  . '",'
+                    . 'height: "' . $height . '",'
+                    . 'skin: "'   . $this->getPlayerSkinUrl() . '"'
+                    . '});'
+                    . '</script>';
+                break;
+            case self::VIDEO_TYPE_YOUTUBE:
+                $html     = '<iframe
+                    style="'  . $width   . 'px;height:' . $height . 'px;"
+                    frameborder="0"
+                    src="' . sprintf('http://www.youtube.com/embed/%s', $item->getData('value')) . '"
+                    width="'  . $width  . '"
+                    height="' . $height . '"></iframe>';
+                break;
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @return string
+     */
+    public function getVideoFileUrl(Open_Gallery_Model_Item $item)
+    {
+        return Mage::getBaseUrl('media') . DS . $item->getData('value');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlayerUtl()
+    {
+        return Mage::getBaseUrl('media') . DS . 'videogallery' . DS . 'player.swf';
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlayerSkinUrl()
+    {
+        return Mage::getBaseUrl('media') . DS . 'videogallery' . DS . 'skin' . DS . 'modieus.zip';
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @param Varien_Data_Form $form
+     * @return $this|Open_Gallery_Helper_Item_Interface
+     */
+    public function prepareEditForm(Open_Gallery_Model_Item $item, Varien_Data_Form $form)
+    {
+        $isReadonlyMode = false;
+        foreach ($form->getElements() as $element) {
+            /** @var Varien_Data_Form_Element_Abstract $element */
+            if ($element instanceof Varien_Data_Form_Element_Fieldset
+                &&'general_information' == $element->getId()) {
+                $fieldSet = $element;
+                $fieldSet->addField('type', 'select', array(
+                    'name'      => 'item[additional][type]',
+                    'label'     => $this->__('Source Type'),
+                    'title'     => $this->__('Source Type'),
+                    'required'  => true,
+                    'disabled'  => $isReadonlyMode,
+                    'options'   => Mage::getModel('open_gallery/config_system_source_type')->toOptionArray(),
+                ));
+
+                $fieldSet->addField('additional_value_file', 'file', array(
+                    'name'      => 'item[additional][value_file]',
+                    'label'     => $this->__('Video File'),
+                    'title'     => $this->__('Video File'),
+                    'required'  => !$item->getData('container_video_file'),
+                    'disabled'  => $isReadonlyMode,
+                    'container_id' => 'container_value_file',
+                    'note'         => $this->__('Allowed format(s): <strong>%s</strong>', implode(', ', $item->getAllowedFormats()))
+                        . '<br/>'
+                        . $this->__('Your server allow you to upload files not more than <strong>%s</strong>. You can modify <strong>post_max_size</strong> (currently is %s) and <strong>upload_max_filesize</strong> (currently is %s) values in php.ini if you want to upload larger files.', $this->getDataMaxSize(), $this->getPostMaxSize(), $this->getUploadMaxSize()),
+                ));
+
+                $fieldSet->addField('additional_value_youtube', 'text', array(
+                    'name'      => 'item[additional][value_youtube]',
+                    'label'     => $this->__('YouTube ID'),
+                    'title'     => $this->__('YouTube ID'),
+                    'required'  => true,
+                    'disabled'  => $isReadonlyMode,
+                    'container_id' => 'container_value_youtube',
+                ));
+
+                $fieldSet->addField('additional_value_embedded', 'textarea', array(
+                    'name'      => 'item[additional][value_embedded]',
+                    'label'     => $this->__('Embed Code'),
+                    'title'     => $this->__('Embed Code'),
+                    'required'  => true,
+                    'disabled'  => $isReadonlyMode,
+                    'container_id' => 'container_value_embedded',
+                ));
+
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @param array $scripts
+     * @return array
+     */
+    public function prepareEditFormScripts(Open_Gallery_Model_Item $item, array $scripts)
+    {
+        $scripts[] = '
+        var VideoType = Class.create({
+            element:null,
+            currentFieldName:null,
+            initialize: function(element) {
+                this.element    = element;
+                this.currentFieldName = element.getAttribute("value");
+                this.switch();
+                Event.observe(element, "change", this.switch.bind(this));
+            },
+            switch:function () {
+                switch (this.element.value) {
+                    case "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_YOUTUBE . '":
+                        $("container_value_file").addClassName("no-display");
+                        $("container_value_embedded").addClassName("no-display");
+                        $("container_value_youtube").removeClassName("no-display");
+                        $("additional_value_file").removeClassName("required-entry");
+                        $("additional_value_embedded").removeClassName("required-entry");
+                        if (this.currentFieldName != "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_YOUTUBE . '") {
+                            $("additional_value_youtube").addClassName("required-entry");
+                        }
+                        break;
+                    case "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_FILE . '":
+                        $("container_value_file").removeClassName("no-display");
+                        $("container_value_youtube").addClassName("no-display");
+                        $("container_value_embedded").addClassName("no-display");
+                        if (this.currentFieldName != "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_FILE . '") {
+                            $("additional_value_file").addClassName("required-entry");
+                        }
+                        $("additional_value_youtube").removeClassName("required-entry");
+                        $("additional_value_embedded").removeClassName("required-entry");
+                        break;
+                    case "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_EMBEDDED . '":
+                        $("container_value_embedded").removeClassName("no-display");
+                        $("container_value_youtube").addClassName("no-display");
+                        $("container_value_file").addClassName("no-display");
+                        if (this.currentFieldName != "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_EMBEDDED . '") {
+                            $("additional_value_embedded").addClassName("required-entry");
+                        }
+                        $("additional_value_youtube").removeClassName("required-entry");
+                        $("additional_value_file").removeClassName("required-entry");
+                        break;
+                    default:
+                        $("container_value_file").addClassName("no-display");
+                        $("container_value_youtube").addClassName("no-display");
+                        $("container_value_embedded").addClassName("no-display");
+                        if (this.isRequired) {
+                            $("additional_value_file").removeClassName("required-entry");
+                            $("additional_value_youtube").removeClassName("required-entry");
+                            $("additional_value_embedded").removeClassName("required-entry");
+                        }
+                        break;
+                }
+            }
+        });
+        var videoType = new VideoType($("type"));
+        ';
+
+        return $scripts;
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $item
+     * @param Mage_Adminhtml_Controller_Action $controller
+     * @return $this|Open_Gallery_Helper_Item_Interface
+     * @throws Exception
+     * @throws Mage_Core_Exception
+     * @throws Open_Gallery_Exception
+     */
+    public function prepareItemSave(Open_Gallery_Model_Item $item, Mage_Adminhtml_Controller_Action $controller)
+    {
+        $data = $controller->getRequest()->getPost('item');
+        $additional = isset($data['additional']) && is_array($data['additional']) ? $data['additional'] : array();
+
+        if (self::VIDEO_TYPE_FILE == $additional['type']) {
+            if (isset($additional['container_video_file'], $additional['container_video_file'], $additional['container_video_file']['delete']) && !empty($additional['container_video_file']['delete'])) {
+                $item->deleteVideoFile();
+            } else if(
+                isset($_FILES['item']['tmp_name']['container_video_file'])
+                && $_FILES['item']['tmp_name']['container_video_file']
+            ) {
+                $savedFilePath = $this->_saveFile('item[additional][value_file]', $item->getAllowedFormats());
+                $item->setData('container_video_file', $savedFilePath);
+            }
+        }
+
+        $item->setData('additional', $additional);
+
+        return parent::prepareItemSave($item, $controller);
+    }
+}
