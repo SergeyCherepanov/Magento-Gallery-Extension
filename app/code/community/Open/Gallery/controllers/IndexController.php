@@ -1,6 +1,6 @@
 <?php
 
-class Open_Gallery_ItemController
+class Open_Gallery_IndexController
     extends Mage_Core_Controller_Front_Action
 {
     /**
