@@ -1,5 +1,4 @@
 # Magento - Open Gallery Extension
-===========
 
 OpenSource Image and Video Gallery Extension for Magento Commerce
 
