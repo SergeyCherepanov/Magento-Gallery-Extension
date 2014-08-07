@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
 
 class Open_Gallery_Model_Form_Element_File
     extends Varien_Data_Form_Element_Abstract

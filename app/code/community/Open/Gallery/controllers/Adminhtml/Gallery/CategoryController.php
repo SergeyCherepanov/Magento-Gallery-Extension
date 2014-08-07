@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
 
 class Open_Gallery_Adminhtml_Gallery_CategoryController
         extends Mage_Adminhtml_Controller_Action

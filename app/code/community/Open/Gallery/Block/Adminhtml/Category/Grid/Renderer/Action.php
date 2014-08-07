@@ -1,5 +1,8 @@
 <?php
-/** {license_text}  */
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
 
 class Open_Gallery_Block_Adminhtml_Category_Grid_Renderer_Action
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract

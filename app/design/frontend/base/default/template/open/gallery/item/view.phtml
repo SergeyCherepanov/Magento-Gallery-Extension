@@ -1,6 +1,10 @@
 <?php
-/** @var Open_Gallery_Block_Item_View $this */
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
 
+/** @var Open_Gallery_Block_Item_View $this */
 ?>
 <h1><?php echo $this->getItem()->getTitle();?></h1>
 <img src="<?php echo Mage::helper('open_gallery')->getImageUrl($this->getItem(), 'value')?>" alt="" />

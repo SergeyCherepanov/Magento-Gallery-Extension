@@ -1,5 +1,9 @@
 <?php
-/** {license_text}  */
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
+
 class Open_Gallery_Adminhtml_Gallery_Item_VideoController
     extends Open_Gallery_Controller_Adminhtml_Item_Abstract
 {

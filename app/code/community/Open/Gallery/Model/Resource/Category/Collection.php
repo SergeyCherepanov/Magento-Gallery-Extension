@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
 
 class Open_Gallery_Model_Resource_Category_Collection
     extends Mage_Core_Model_Resource_Db_Collection_Abstract

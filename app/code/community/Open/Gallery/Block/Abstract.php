@@ -1,5 +1,9 @@
 <?php
-/** {license_text}  */
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
+
 abstract class Open_Gallery_Block_Abstract
     extends Mage_Core_Block_Template
 {

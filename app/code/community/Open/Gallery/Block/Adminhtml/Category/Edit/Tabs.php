@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
 
 class Open_Gallery_Block_Adminhtml_Category_Edit_Tabs
     extends Mage_Adminhtml_Block_Widget_Tabs
