@@ -18,11 +18,12 @@ abstract class Open_Gallery_Block_Abstract
 
     /**
      * @param Open_Gallery_Model_Item $item
+     * @param array $params
      * @return string
      */
-    public function getItemUrl(Open_Gallery_Model_Item $item)
+    public function getItemUrl(Open_Gallery_Model_Item $item, $params = array())
     {
-        return $this->getUrl('gallery/item/view', array('id' => $item->getId()));
+        return $this->getUrl('gallery/item/view', array_merge($params, array('id' => $item->getId())));
     }
 
     /**
@@ -40,5 +41,23 @@ abstract class Open_Gallery_Block_Abstract
         }
 
         return Mage::helper('open_gallery')->getImageUrl($object, $field, $width, $height);
+    }
+
+    /**
+     * @param Open_Gallery_Model_Item $object
+     * @param null $width
+     * @param null $height
+     * @return string
+     */
+    public function getItemBoxUrl(Open_Gallery_Model_Item $object, $width = null, $height = null)
+    {
+        switch ($object->getData('type')) {
+            case Open_Gallery_Model_Item::TYPE_IMAGE:
+                return Mage::helper('open_gallery')->getImageUrl($object, 'value', $width, $height);
+                break;
+            default:
+                return $this->getItemUrl($object);
+                break;
+        }
     }
 }

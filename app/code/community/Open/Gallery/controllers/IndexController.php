@@ -5,7 +5,7 @@
  */
 
 class Open_Gallery_IndexController
-    extends Mage_Core_Controller_Front_Action
+    extends Open_Gallery_Controller_Abstract
 {
     /**
      * Gallery Home

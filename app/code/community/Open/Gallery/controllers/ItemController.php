@@ -5,7 +5,7 @@
  */
 
 class Open_Gallery_ItemController
-    extends Mage_Core_Controller_Front_Action
+    extends Open_Gallery_Controller_Abstract
 {
     /**
      * Prepare View Page
@@ -23,5 +23,19 @@ class Open_Gallery_ItemController
         } else {
             $this->_redirectReferer();
         }
+    }
+
+    /**
+     * @param string $output
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function renderLayout($output = '')
+    {
+        if ('XMLHttpRequest' == $this->getRequest()->getHeader('X-Requested-With')) {
+            $this->getLayout()->removeOutputBlock('root');
+            $output = 'gallery_item_view';
+        }
+
+        return parent::renderLayout($output);
     }
 }

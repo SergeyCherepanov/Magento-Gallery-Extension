@@ -6,6 +6,13 @@
  */
 -->
 <layout version="0.1.0">
+    <open_gallery_scripts>
+        <reference name="head">
+            <block type="open_gallery/scripts" name="gallery_scripts" template="open/gallery/scripts.phtml"/>
+            <action method="addItem"><type>js_css</type><name>open/lib/jquery/colorbox/colorbox.css</name></action>
+        </reference>
+    </open_gallery_scripts>
+
     <open_gallery_index_index>
         <reference name="content">
             <block type="open_gallery/home" name="gallery_home" template="open/gallery/home.phtml" />
@@ -22,13 +29,13 @@
 
     <open_gallery_item_view_image>
         <reference name="content">
-            <block type="open_gallery/item_view" name="gallery_category_view" template="open/gallery/item/view/image.phtml" />
+            <block type="open_gallery/item_view" name="gallery_item_view" template="open/gallery/item/view/image.phtml" />
         </reference>
     </open_gallery_item_view_image>
 
     <open_gallery_item_view_video>
         <reference name="content">
-            <block type="open_gallery/item_view" name="gallery_category_view" template="open/gallery/item/view/video.phtml" />
+            <block type="open_gallery/item_view" name="gallery_item_view" template="open/gallery/item/view/video.phtml" />
         </reference>
     </open_gallery_item_view_video>
 </layout>
