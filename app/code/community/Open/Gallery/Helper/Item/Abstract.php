@@ -43,7 +43,7 @@ abstract class Open_Gallery_Helper_Item_Abstract
             }
         }
 
-        unset($data['thumbnail'], $data['container_video_file']);
+        unset($data['thumbnail']);
 
         $item->addData($data);
 
@@ -58,7 +58,7 @@ abstract class Open_Gallery_Helper_Item_Abstract
      */
     protected function _saveFile($paramName, $allowedFormats = null, $subDir = null)
     {
-        $localPath = 'item' . DS . 'gallery' . DS;
+        $localPath = 'gallery' . DS . 'item' . DS;
         if ($subDir) {
             $localPath .= $subDir . DS;
         }

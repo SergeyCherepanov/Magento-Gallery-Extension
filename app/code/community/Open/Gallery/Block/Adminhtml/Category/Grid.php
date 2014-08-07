@@ -55,6 +55,20 @@ class Open_Gallery_Block_Adminhtml_Category_Grid
             'header_export' => 'title',
         ));
 
+        $this->addColumn('title', array(
+            'header'        => $this->_getHelper()->__('Actions'),
+            'index'         => 'title',
+            'header_export' => 'title',
+        ));
+
+        $this->addColumn('actions', array(
+            'header'    => Mage::helper('cms')->__('Action'),
+            'width'     => 200,
+            'sortable'  => false,
+            'filter'    => false,
+            'renderer'  => 'open_gallery/adminhtml_category_grid_renderer_action',
+        ));
+
         return parent::_prepareColumns();
     }
 
@@ -74,6 +88,6 @@ class Open_Gallery_Block_Adminhtml_Category_Grid
      */
     public function getRowUrl($item)
     {
-        return $this->getUrl('*/*/edit', array('_current' => true, 'id' => $item->getId()));
+        return $this->getUrl('*/gallery_item/list', array('_current' => true, 'id' => $item->getId()));
     }
 }

@@ -55,4 +55,12 @@ class Open_Gallery_Block_Adminhtml_Item_Edit
             return $this->_getHelper()->__('New Item');
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getBackUrl()
+    {
+        return $this->getUrl('*/gallery_item/list', array('id' => $this->getRequest()->getParam('category')));
+    }
 }

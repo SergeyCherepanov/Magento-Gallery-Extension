@@ -199,9 +199,9 @@ class Open_Gallery_Helper_Item_Video
         foreach ($form->getElements() as $element) {
             /** @var Varien_Data_Form_Element_Abstract $element */
             if ($element instanceof Varien_Data_Form_Element_Fieldset
-                &&'general_information' == $element->getId()) {
+                && 'general_information' == $element->getId()) {
                 $fieldSet = $element;
-                $fieldSet->addField('type', 'select', array(
+                $fieldSet->addField('additional_type', 'select', array(
                     'name'      => 'item[additional][type]',
                     'label'     => $this->__('Source Type'),
                     'title'     => $this->__('Source Type'),
@@ -211,10 +211,10 @@ class Open_Gallery_Helper_Item_Video
                 ));
 
                 $fieldSet->addField('additional_value_file', 'file', array(
-                    'name'      => 'item[additional][value_file]',
+                    'name'      => 'item[additional_value_file]',
                     'label'     => $this->__('Video File'),
                     'title'     => $this->__('Video File'),
-                    'required'  => !$item->getData('container_video_file'),
+                    'required'  => !$item->getData('additional/value_file'),
                     'disabled'  => $isReadonlyMode,
                     'container_id' => 'container_value_file',
                     'note'         => $this->__('Allowed format(s): <strong>%s</strong>', implode(', ', $item->getAllowedFormats()))
@@ -309,7 +309,7 @@ class Open_Gallery_Helper_Item_Video
                 }
             }
         });
-        var videoType = new VideoType($("type"));
+        var videoType = new VideoType($("additional_type"));
         ';
 
         return $scripts;
@@ -325,23 +325,26 @@ class Open_Gallery_Helper_Item_Video
      */
     public function prepareItemSave(Open_Gallery_Model_Item $item, Mage_Adminhtml_Controller_Action $controller)
     {
+        parent::prepareItemSave($item, $controller);
+
         $data = $controller->getRequest()->getPost('item');
         $additional = isset($data['additional']) && is_array($data['additional']) ? $data['additional'] : array();
 
         if (self::VIDEO_TYPE_FILE == $additional['type']) {
-            if (isset($additional['container_video_file'], $additional['container_video_file'], $additional['container_video_file']['delete']) && !empty($additional['container_video_file']['delete'])) {
+            if (isset($data['additional_value_file'], $data['additional_value_file'], $data['additional_value_file']['delete']) && !empty($data['additional_value_file']['delete'])) {
                 $item->deleteVideoFile();
             } else if(
-                isset($_FILES['item']['tmp_name']['container_video_file'])
-                && $_FILES['item']['tmp_name']['container_video_file']
+                isset($_FILES['item']['tmp_name']['additional_value_file'])
+                && $_FILES['item']['tmp_name']['additional_value_file']
             ) {
-                $savedFilePath = $this->_saveFile('item[additional][value_file]', $item->getAllowedFormats());
-                $item->setData('container_video_file', $savedFilePath);
+                $savedFilePath = $this->_saveFile('item[additional_value_file]', $item->getAllowedFormats());
+                $additional['value_file'] = $savedFilePath;
+                $item->setData('value', $savedFilePath);
             }
         }
 
         $item->setData('additional', $additional);
 
-        return parent::prepareItemSave($item, $controller);
+        return $this;
     }
 }

@@ -1,45 +1,22 @@
 <?php
-
-class Open_Gallery_Adminhtml_Gallery_Video_ItemController
+/** {license_text}  */
+abstract class Open_Gallery_Controller_Adminhtml_Item_Abstract
     extends Mage_Adminhtml_Controller_Action
 {
-    protected $_entityModel = 'open_gallery/item';
-
     /**
-     * @return Mage_Core_Model_Abstract
+     * Prepare menu and handles
      */
-    protected function _getEntityModel()
-    {
-        /** @var Mage_Core_Model_Abstract $item */
-        $item = Mage::getModel($this->_entityModel);
-        $item->setData('type', Open_Gallery_Model_Item::TYPE_VIDEO);
-
-        return $item;
-    }
-
     protected function _initLayout()
     {
         $this->loadLayout();
+        $this->_setActiveMenu('cms/gallery');
         $this->initLayoutMessages(array('adminhtml/session'));
     }
 
     /**
-     * Video items grid
+     * @return Open_Gallery_Model_Item
      */
-    public function listAction()
-    {
-        $this->_initLayout();
-        $this->renderLayout();
-    }
-
-    /**
-     * Video items grid
-     */
-    public function itemAjaxGridAction()
-    {
-        $this->loadLayout('adminhtml_gallery_video_item_list_grid');
-        $this->renderLayout();
-    }
+    abstract protected function _getEntityModel();
 
     /**
      * Create new video
@@ -91,8 +68,7 @@ class Open_Gallery_Adminhtml_Gallery_Video_ItemController
                 $this->_getSession()->addSuccess($this->__('Item information updated successfully.'));
             }
 
-            $this->_redirect('*/*/list');
-
+            $this->_redirect('*/gallery_item/list', array('id' => $model->getData('category_id')));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_redirectReferer();
@@ -112,9 +88,11 @@ class Open_Gallery_Adminhtml_Gallery_Video_ItemController
             $request  = $this->getRequest();
             /** @var Open_Gallery_Model_Item $item */
             $item = $this->_getEntityModel();
-            $item->setId($request->getParam('id'));
+            $item->load($request->getParam('id'));
+            $categoryId = $item->getData('category_id');
             $item->delete();
             $this->_getSession()->addSuccess($this->__('Video was deleted successfully.'));
+            $this->_redirect('*/gallery_category/list', array('id' => $categoryId));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_redirectReferer();
@@ -122,7 +100,5 @@ class Open_Gallery_Adminhtml_Gallery_Video_ItemController
             $this->_getSession()->addException($e, $this->__('Something went wrong...'));
             $this->_redirectReferer();
         }
-
-        $this->_redirect('*/*');
     }
 }

@@ -40,7 +40,7 @@ class Open_Gallery_Block_Adminhtml_Category_Edit_Tab_General
             'disabled'  => $isReadonlyMode
         ));
 
-        $fieldSet->addField('thumbnail', 'file', array(
+        $fieldSet->addField('thumbnail', 'image', array(
             'name'      => 'category[thumbnail]',
             'label'     => $helper->__('Thumbnail'),
             'title'     => $helper->__('Thumbnail'),

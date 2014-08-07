@@ -3,6 +3,9 @@
 class Open_Gallery_CategoryController
         extends Mage_Core_Controller_Front_Action
 {
+    /**
+     * Gallery Page
+     */
     public function viewAction()
     {
         /** @var Open_Gallery_Model_Category $category */

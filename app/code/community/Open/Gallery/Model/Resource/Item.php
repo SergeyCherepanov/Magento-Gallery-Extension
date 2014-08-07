@@ -15,11 +15,11 @@ class Open_Gallery_Model_Resource_Item
      */
     protected function _prepareDataForTable(Varien_Object $object, $table)
     {
-        $data = parent::_prepareDataForTable($object, $table);
-
         if (is_array($object->getData('additional'))) {
-            $data['additional'] = Mage::helper('core')->jsonEncode($object->getData('additional'));
+            $object->setData('additional', Mage::helper('core')->jsonEncode($object->getData('additional')));
         }
+
+        $data = parent::_prepareDataForTable($object, $table);
 
         return $data;
     }

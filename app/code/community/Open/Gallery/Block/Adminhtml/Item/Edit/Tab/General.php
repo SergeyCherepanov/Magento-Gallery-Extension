@@ -36,6 +36,10 @@ class Open_Gallery_Block_Adminhtml_Item_Edit_Tab_General
             $fieldSet->addField('entity_id', 'hidden', array(
                 'name' => 'item[id]',
             ));
+        } else {
+            $item->addData(array(
+                'category_id' => $this->getRequest()->getParam('category')
+            ));
         }
 
         $fieldSet->addField('title', 'text', array(

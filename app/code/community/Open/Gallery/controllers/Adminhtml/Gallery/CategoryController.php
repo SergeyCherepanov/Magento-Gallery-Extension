@@ -1,6 +1,6 @@
 <?php
 
-class Open_Gallery_Adminhtml_Gallery_Video_CategoryController
+class Open_Gallery_Adminhtml_Gallery_CategoryController
         extends Mage_Adminhtml_Controller_Action
 {
     protected $_entityModel = 'open_gallery/category';
@@ -13,20 +13,36 @@ class Open_Gallery_Adminhtml_Gallery_Video_CategoryController
         return Mage::getModel($this->_entityModel);
     }
 
+    /**
+     * Prepare menu and handles
+     */
     protected function _initLayout()
     {
         $this->loadLayout();
+        $this->_setActiveMenu('cms/gallery');
         $this->initLayoutMessages(array('adminhtml/session'));
     }
+
+    /**
+     * Go to list
+     */
+    public function indexAction()
+    {
+        $this->_redirect('*/*/list');
+    }
+
     /**
      * Video categories grid
      */
-    public function indexAction()
+    public function listAction()
     {
         $this->_initLayout();
         $this->renderLayout();
     }
 
+    /**
+     * Render grid for ajax request
+     */
     public function categoryAjaxGridAction()
     {
         $this->loadLayout('adminhtml_open_gallery_category_grid');

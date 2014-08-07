@@ -32,6 +32,7 @@ class Open_Gallery_Block_Adminhtml_Item_Grid
     {
         /** @var $collection Open_Gallery_Model_Resource_Item_Collection */
         $collection = Mage::getResourceModel('open_gallery/item_collection');
+        $collection->addFieldToFilter('category_id', Mage::registry('category')->getId());
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -46,21 +47,28 @@ class Open_Gallery_Block_Adminhtml_Item_Grid
             'header'        => $this->_getHelper()->__('ID'),
             'width'         => '50px',
             'index'         => 'entity_id',
-            'header_export' => 'entity_id',
         ));
 
         $this->addColumn('title', array(
             'header'        => $this->_getHelper()->__('Title'),
             'index'         => 'title',
-            'header_export' => 'title',
         ));
 
         $this->addColumn('featured', array(
             'header'        => $this->_getHelper()->__('Featured'),
             'index'         => 'featured',
-            'header_export' => 'featured',
             'type'          => 'options',
             'options'       => Mage::getModel('adminhtml/system_config_source_yesno')->toArray(),
+        ));
+
+        $this->addColumn('type', array(
+            'header'        => $this->_getHelper()->__('Type'),
+            'index'         => 'type',
+            'type'          => 'options',
+            'options'       => array(
+                Open_Gallery_Model_Item::TYPE_IMAGE => $this->__('Image'),
+                Open_Gallery_Model_Item::TYPE_VIDEO => $this->__('Video'),
+            )
         ));
 
         return parent::_prepareColumns();
@@ -82,6 +90,18 @@ class Open_Gallery_Block_Adminhtml_Item_Grid
      */
     public function getRowUrl($item)
     {
-        return $this->getUrl('*/*/edit', array('_current' => true, 'id' => $item->getId()));
+        switch ($item->getData('type')) {
+            default:
+                $url = false;
+                break;
+            case Open_Gallery_Model_Item::TYPE_VIDEO:
+                $url = $this->getUrl('*/gallery_item_video/edit', array('_current' => true, 'id' => $item->getId(), 'category' => $this->getRequest()->getParam('id')));
+                break;
+            case Open_Gallery_Model_Item::TYPE_IMAGE:
+                $url = $this->getUrl('*/gallery_item_image/edit', array('_current' => true, 'id' => $item->getId(), 'category' => $this->getRequest()->getParam('id')));
+                break;
+        }
+
+        return $url;
     }
 }
