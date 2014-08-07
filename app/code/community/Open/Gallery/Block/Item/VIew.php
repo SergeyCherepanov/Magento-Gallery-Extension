@@ -1,2 +1,0 @@
-<?php
-/** {license_text}  */
