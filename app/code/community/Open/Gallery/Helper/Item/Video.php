@@ -97,7 +97,7 @@ class Open_Gallery_Helper_Item_Video
         $html   = '';
         $width  = ($width  > 0 ? intval($width)  : $this->getVideoWidth());
         $height = ($height > 0 ? intval($height) : $this->getVideoHeight());;
-        switch ($item->getType()) {
+        switch ($item->getData('additional/type')) {
             case self::VIDEO_TYPE_EMBEDDED:
                 $html = $item->getData('value');
                 $html = preg_replace('/width\=[\"\']{0,1}\d+[\"\']{0,1}/si',  sprintf('width="%d"', $width), $html);
@@ -107,11 +107,12 @@ class Open_Gallery_Helper_Item_Video
                 $html     = '<div id="container">'. $this->__('Loading the player ...') .'</div>'
                     . '<script type="text/javascript">'
                     . 'jwplayer("container").setup({'
-                    . 'flashplayer: "' . $this->getPlayerUtl() . '",'
+                    //. 'flashplayer: "' . $this->getPlayerUrl() . '",'
                     . 'file: "'  . $this->getVideoFileUrl($item) .'",'
+                    . 'image: "'  . $this->getImageUrl($item, 'thumbnail') .'",'
                     . 'width: "'  . $width  . '",'
                     . 'height: "' . $height . '",'
-                    . 'skin: "'   . $this->getPlayerSkinUrl() . '"'
+                    //. 'skin: "'   . $this->getPlayerSkinUrl() . '"'
                     . '});'
                     . '</script>';
                 break;
@@ -134,15 +135,15 @@ class Open_Gallery_Helper_Item_Video
      */
     public function getVideoFileUrl(Open_Gallery_Model_Item $item)
     {
-        return Mage::getBaseUrl('media') . DS . $item->getData('value');
+        return Mage::getBaseUrl('media') .  $item->getData('value');
     }
 
     /**
      * @return string
      */
-    public function getPlayerUtl()
+    public function getPlayerUrl()
     {
-        return Mage::getBaseUrl('media') . DS . 'videogallery' . DS . 'player.swf';
+        return Mage::getBaseUrl('media') . 'gallery' . DS . 'player.swf';
     }
 
     /**
@@ -150,7 +151,7 @@ class Open_Gallery_Helper_Item_Video
      */
     public function getPlayerSkinUrl()
     {
-        return Mage::getBaseUrl('media') . DS . 'videogallery' . DS . 'skin' . DS . 'modieus.zip';
+        return Mage::getBaseUrl('media') . 'videogallery' . DS . 'skin' . DS . 'modieus.zip';
     }
 
     /**
@@ -302,7 +303,7 @@ class Open_Gallery_Helper_Item_Video
                 isset($_FILES['item']['tmp_name']['additional_value_file'])
                 && $_FILES['item']['tmp_name']['additional_value_file']
             ) {
-                $savedFilePath = $this->_saveFile('item[additional_value_file]', $item->getAllowedFormats());
+                $savedFilePath = $this->_saveFile('item[additional_value_file]', $item->getAllowedFormats(), 'video');
                 $additional['value_file'] = $savedFilePath;
                 $item->setData('value', $savedFilePath);
             }

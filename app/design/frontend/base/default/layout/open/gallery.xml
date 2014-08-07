@@ -20,9 +20,15 @@
         </reference>
     </open_gallery_category_view>
 
-    <open_gallery_item_view>
+    <open_gallery_item_view_image>
         <reference name="content">
-            <block type="open_gallery/item_view" name="gallery_category_view" template="open/gallery/item/view.phtml" />
+            <block type="open_gallery/item_view" name="gallery_category_view" template="open/gallery/item/view/image.phtml" />
         </reference>
-    </open_gallery_item_view>
+    </open_gallery_item_view_image>
+
+    <open_gallery_item_view_video>
+        <reference name="content">
+            <block type="open_gallery/item_view" name="gallery_category_view" template="open/gallery/item/view/video.phtml" />
+        </reference>
+    </open_gallery_item_view_video>
 </layout>

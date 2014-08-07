@@ -85,7 +85,7 @@ abstract class Open_Gallery_Helper_Item_Abstract
      */
     protected function _saveFile($paramName, $allowedFormats = null, $subDir = null)
     {
-        $localPath = 'gallery' . DS . 'item' . DS;
+        $localPath = 'gallery' . DS . 'data' . DS;
         if ($subDir) {
             $localPath .= $subDir . DS;
         }
@@ -110,8 +110,9 @@ abstract class Open_Gallery_Helper_Item_Abstract
      */
     public function prepareAndRenderView(Open_Gallery_Model_Item $item, Mage_Core_Controller_Varien_Action $controller)
     {
-        $controller->loadLayout();
-        $controller->getLayout()->getUpdate()->addHandle($controller->getFullActionName() . '_' . $item->getData('type'));
+        $controller->loadLayout(
+            array ('default', strtolower($controller->getFullActionName() . '_' . $item->getData('type')))
+        );
         $controller->renderLayout();
 
         return $this;
