@@ -54,6 +54,17 @@ class Open_Gallery_Block_Adminhtml_Item_Grid
             'index'         => 'title',
         ));
 
+
+        $this->addColumn('status', array(
+            'header'        => $this->_getHelper()->__('Status'),
+            'index'         => 'status',
+            'type'          => 'options',
+            'options'       => array(
+                Open_Gallery_Model_Item::STATUS_ENABLED => $this->__('Enabled'),
+                Open_Gallery_Model_Item::STATUS_DISABLED => $this->__('Disabled'),
+            )
+        ));
+
         $this->addColumn('featured', array(
             'header'        => $this->_getHelper()->__('Featured'),
             'index'         => 'featured',

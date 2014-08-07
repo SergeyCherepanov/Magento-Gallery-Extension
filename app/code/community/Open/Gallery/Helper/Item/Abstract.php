@@ -4,6 +4,29 @@ abstract class Open_Gallery_Helper_Item_Abstract
     extends Open_Gallery_Helper_Data
     implements Open_Gallery_Helper_Item_Interface
 {
+    /**
+     * @return int
+     */
+    public function getDataMaxSize()
+    {
+        return min($this->getPostMaxSize(), $this->getUploadMaxSize());
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostMaxSize()
+    {
+        return ini_get('post_max_size');
+    }
+
+    /**
+     * @return string
+     */
+    public function getUploadMaxSize()
+    {
+        return ini_get('upload_max_filesize');
+    }
 
     /**
      * @param Open_Gallery_Model_Item $item
@@ -43,7 +66,7 @@ abstract class Open_Gallery_Helper_Item_Abstract
             }
         }
 
-        unset($data['thumbnail']);
+        unset($data['thumbnail'], $data['value']);
 
         $item->addData($data);
 
@@ -84,6 +107,7 @@ abstract class Open_Gallery_Helper_Item_Abstract
     public function prepareAndRenderView(Open_Gallery_Model_Item $item, Mage_Core_Controller_Varien_Action $controller)
     {
         $controller->loadLayout();
+        $controller->getLayout()->getUpdate()->addHandle($controller->getFullActionName() . '_' . $item->getData('type'));
         $controller->renderLayout();
 
         return $this;

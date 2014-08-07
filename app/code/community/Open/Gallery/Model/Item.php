@@ -75,9 +75,9 @@ class Open_Gallery_Model_Item
     /**
      * @return $this
      */
-    public function deleteVideoFile()
+    public function deleteValueFile()
     {
-        return $this->_deleteFile('video_file');
+        return $this->_deleteFile('value');
     }
 
     /**
@@ -92,12 +92,21 @@ class Open_Gallery_Model_Item
             unlink($path);
             $this->setData($fieldName, '');
         } else {
-            /** @var $helper Open_Gallery_Helper_Data */
-            $helper = Mage::helper('open_gallery');
-            throw new Open_Gallery_Exception($helper->__("Can't delete file '%s'", $path));
+            if (file_exists($path)) {
+                /** @var $helper Open_Gallery_Helper_Data */
+                $helper = Mage::helper('open_gallery');
+                throw new Open_Gallery_Exception($helper->__("Can't delete file '%s'", $path));
+            }
         }
 
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return Mage::helper('open_gallery')->escapeHtml($this->getData('title'));
+    }
 }

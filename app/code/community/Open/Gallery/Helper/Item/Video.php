@@ -83,45 +83,6 @@ class Open_Gallery_Helper_Item_Video
     }
 
     /**
-     * @param string $imagePath
-     * @param int|null $width
-     * @param int|null $height
-     * @return string
-     */
-    public function getImageUrl($imagePath, $width = null, $height = null)
-    {
-        $mediaDir = Mage::getBaseDir('media');
-        $cacheDir = implode('/', array('video', 'image', 'cache'));
-        $path     = $mediaDir . DS .$cacheDir;
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
-        $baseFileName = $imagePath;
-        $fileName = $width . '-' . $height . '-' . basename($baseFileName);
-        $filePath = $path . DS . $fileName;
-        if (!is_file($filePath)) {
-            $imageAbsPath = $mediaDir . DS . $baseFileName;
-            if (!is_file($imageAbsPath)) {
-                $imageAbsPath = Mage::getDesign()->getSkinBaseDir() . 'images' . DS . 'catalog' . DS .'product' . DS .'placeholder' . DS . 'small_image.jpg';
-                if (!is_file($imageAbsPath)) {
-                    $imageAbsPath = Mage::getDesign()->getSkinBaseDir(array('_package' => 'base', '_theme' => 'default')) . DS . 'images' . DS . 'catalog' . DS .'product' . DS .'placeholder' . DS . 'small_image.jpg';
-                }
-            }
-            $image = new Varien_Image($imageAbsPath);
-            $image->keepAspectRatio(true);
-            $image->keepFrame(true);
-            $image->constrainOnly(true);
-            $image->backgroundColor(array(0,0,0));
-            if ($width) {
-                $image->resize(intval($width), $height);
-            }
-            $image->save($path, $fileName);
-        }
-        $url = Mage::getBaseUrl('media') . $cacheDir . '/' . $fileName;
-        return $url;
-    }
-
-    /**
      * @param Open_Gallery_Model_Item $item
      * @param int|null $width
      * @param int|null $height
@@ -214,7 +175,7 @@ class Open_Gallery_Helper_Item_Video
                     'name'      => 'item[additional_value_file]',
                     'label'     => $this->__('Video File'),
                     'title'     => $this->__('Video File'),
-                    'required'  => !$item->getData('additional/value_file'),
+                    'required'  => !strlen($item->getData('value')),
                     'disabled'  => $isReadonlyMode,
                     'container_id' => 'container_value_file',
                     'note'         => $this->__('Allowed format(s): <strong>%s</strong>', implode(', ', $item->getAllowedFormats()))
@@ -281,7 +242,7 @@ class Open_Gallery_Helper_Item_Video
                         $("container_value_youtube").addClassName("no-display");
                         $("container_value_embedded").addClassName("no-display");
                         if (this.currentFieldName != "' . Open_Gallery_Helper_Item_Video::VIDEO_TYPE_FILE . '") {
-                            $("additional_value_file").addClassName("required-entry");
+                            //$("additional_value_file").addClassName("required-entry");
                         }
                         $("additional_value_youtube").removeClassName("required-entry");
                         $("additional_value_embedded").removeClassName("required-entry");
@@ -332,7 +293,7 @@ class Open_Gallery_Helper_Item_Video
 
         if (self::VIDEO_TYPE_FILE == $additional['type']) {
             if (isset($data['additional_value_file'], $data['additional_value_file'], $data['additional_value_file']['delete']) && !empty($data['additional_value_file']['delete'])) {
-                $item->deleteVideoFile();
+                $item->deleteValueFile();
             } else if(
                 isset($_FILES['item']['tmp_name']['additional_value_file'])
                 && $_FILES['item']['tmp_name']['additional_value_file']

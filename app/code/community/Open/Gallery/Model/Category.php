@@ -127,4 +127,25 @@ class Open_Gallery_Model_Category
         }
         return $this;
     }
+
+    /**
+     * @return Open_Gallery_Model_Resource_Item_Collection
+     */
+    public function getItemCollection()
+    {
+        /** @var Open_Gallery_Model_Resource_Item_Collection $collection */
+        $collection = Mage::getResourceModel('open_gallery/item_collection');
+        $collection->addFieldToFilter('status', Open_Gallery_Model_Item::STATUS_ENABLED);
+        $collection->addFieldToFilter('category_id', $this->getId());
+
+        return $collection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return Mage::helper('open_gallery')->escapeHtml($this->getData('title'));
+    }
 }

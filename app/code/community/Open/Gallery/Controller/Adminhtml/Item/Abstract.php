@@ -73,6 +73,7 @@ abstract class Open_Gallery_Controller_Adminhtml_Item_Abstract
             $this->_getSession()->addError($e->getMessage());
             $this->_redirectReferer();
         } catch (Exception $e) {
+            echo $e->getTraceAsString();die();
             $this->_getSession()->addError($e->getMessage());
             Mage::logException($e);
             $this->_redirectReferer();

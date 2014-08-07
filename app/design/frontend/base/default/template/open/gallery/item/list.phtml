@@ -1,0 +1,16 @@
+<?php
+/** @var Open_Gallery_Model_Category $item */
+$item = $this->getCategory();
+/** @var Open_Gallery_Block_Item_List $this */
+$itemCollection = $this->getItemCollection();
+?>
+<h1><?php echo $item->getTitle();?></h1>
+<ul class="gallery-item-lisr">
+    <?php foreach ($itemCollection as $item):
+        /** @var Open_Gallery_Model_Item $item */ ?>
+        <li>
+            <img width="64" src="<?php echo $this->getThumbnailUrl($item)?>" alt="<?php echo $item->getTitle();?>" />
+            <a href="<?php echo $this->getItemUrl($item)?>"><?php echo $item->getTitle();?></a>
+        </li>
+    <?php endforeach;?>
+</ul>

@@ -21,6 +21,7 @@ $categoryTable->addColumn('parent_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, 
     'unsigned' => true,
     'nullable' => true,
     'primary'  => false,
+    'default'  => 0,
 ));
 
 $categoryTable->addColumn('title', Varien_Db_Ddl_Table::TYPE_VARCHAR, null, array(

@@ -1,0 +1,15 @@
+<?php
+/** @var Open_Gallery_Block_Home $this */
+$categoryCollection = $this->getCategoryCollection();
+?>
+<h1><?php echo $this->__('Open Gallery')?></h1>
+<h3><?php echo $this->__('Available Categories')?></h3>
+<ul>
+    <?php foreach ($categoryCollection as $category):
+    /** @var Open_Gallery_Model_Category $category */ ?>
+    <li>
+        <img width="64" src="<?php echo $this->getThumbnailUrl($category)?>" alt="<?php echo $category->getTitle();?>" />
+        <a href="<?php echo $this->getCategoryUrl($category)?>"><?php echo $category->getTitle();?></a>
+    </li>
+    <?php endforeach;?>
+</ul>

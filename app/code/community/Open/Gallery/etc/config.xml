@@ -63,13 +63,13 @@
     </adminhtml>
     <frontend>
         <routers>
-            <video>
+            <open_gallery>
                 <use>standard</use>
                 <args>
                     <module>Open_Gallery</module>
                     <frontName>gallery</frontName>
                 </args>
-            </video>
+            </open_gallery>
         </routers>
         <layout>
             <updates>

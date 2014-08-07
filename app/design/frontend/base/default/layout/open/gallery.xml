@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <open_gallery_index_index>
+        <reference name="content">
+            <block type="open_gallery/home" name="gallery_home" template="open/gallery/home.phtml" />
+        </reference>
+    </open_gallery_index_index>
+
+    <open_gallery_category_view>
+        <reference name="content">
+            <block type="open_gallery/category_view" name="gallery_category_view" template="open/gallery/category/view.phtml">
+                <block type="open_gallery/item_list" name="gallery_item_list" as="item_list" template="open/gallery/item/list.phtml" />
+            </block>
+        </reference>
+    </open_gallery_category_view>
+
+    <open_gallery_item_view>
+        <reference name="content">
+            <block type="open_gallery/item_view" name="gallery_category_view" template="open/gallery/item/view.phtml" />
+        </reference>
+    </open_gallery_item_view>
+</layout>

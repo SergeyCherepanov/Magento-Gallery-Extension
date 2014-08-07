@@ -60,7 +60,7 @@ class Open_Gallery_Helper_Item_Image
 
         $data = $controller->getRequest()->getPost('item');
         if (isset($data['value'], $data['value']['delete']) && !empty($data['value']['delete'])) {
-            $item->deletevalue();
+            $item->deleteValueFile();
         } else if (
             isset($_FILES['item']['tmp_name']['value'])
             && $_FILES['item']['tmp_name']['value']
