@@ -10,7 +10,7 @@
         <cms>
             <children>
                 <open_gallery module="open_gallery">
-                    <title>Galleries</title>
+                    <title>Gallery</title>
                     <sort_order>0</sort_order>
                     <action>adminhtml/gallery_category/list</action>
                 </open_gallery>
