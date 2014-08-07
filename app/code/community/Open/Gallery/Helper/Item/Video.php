@@ -296,17 +296,30 @@ class Open_Gallery_Helper_Item_Video
         $data = $controller->getRequest()->getPost('item');
         $additional = isset($data['additional']) && is_array($data['additional']) ? $data['additional'] : array();
 
-        if (self::VIDEO_TYPE_FILE == $additional['type']) {
-            if (isset($data['additional_value_file'], $data['additional_value_file'], $data['additional_value_file']['delete']) && !empty($data['additional_value_file']['delete'])) {
-                $item->deleteValueFile();
-            } else if(
-                isset($_FILES['item']['tmp_name']['additional_value_file'])
-                && $_FILES['item']['tmp_name']['additional_value_file']
-            ) {
-                $savedFilePath = $this->_saveFile('item[additional_value_file]', $item->getAllowedFormats(), 'video');
-                $additional['value_file'] = $savedFilePath;
-                $item->setData('value', $savedFilePath);
-            }
+        switch ($additional['type']) {
+            case self::VIDEO_TYPE_FILE:
+                if (isset($data['additional_value_file'], $data['additional_value_file'], $data['additional_value_file']['delete']) && !empty($data['additional_value_file']['delete'])) {
+                    $item->deleteValueFile();
+                } else if(
+                    isset($_FILES['item']['tmp_name']['additional_value_file'])
+                    && $_FILES['item']['tmp_name']['additional_value_file']
+                ) {
+                    $savedFilePath = $this->_saveFile('item[additional_value_file]', $item->getAllowedFormats(), 'video');
+                    $additional['value_file'] = $savedFilePath;
+                    $item->setData('value', $savedFilePath);
+                }
+                break;
+            case self::VIDEO_TYPE_EMBEDDED:
+                if (array_key_exists('value_embedded', $additional)) {
+                    $item->setData('value', $additional['value_embedded']);
+                }
+                break;
+            case self::VIDEO_TYPE_YOUTUBE:
+                if (array_key_exists('value_youtube', $additional)) {
+                    $item->setData('value', $additional['value_youtube']);
+                }
+                break;
+
         }
 
         $item->setData('additional', $additional);
