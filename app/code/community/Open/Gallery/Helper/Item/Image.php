@@ -70,7 +70,7 @@ class Open_Gallery_Helper_Item_Image
             && $_FILES['item']['tmp_name']['value']
         ) {
             try {
-                $savedFilePath = $this->_saveFile('item[value]', array('jpg', 'jpeg', 'png', 'gif'), 'value');
+                $savedFilePath = $this->_saveFile('item[value]', array('jpg', 'jpeg', 'png', 'gif'), 'image');
                 $item->setData('value', $savedFilePath);
             } catch (Mage_Core_Exception $e) {
                 throw $e;
