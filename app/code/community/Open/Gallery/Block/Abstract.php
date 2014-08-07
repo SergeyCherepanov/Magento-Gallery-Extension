@@ -33,6 +33,12 @@ abstract class Open_Gallery_Block_Abstract
      */
     public function getThumbnailUrl(Varien_Object $object, $width = 64, $height = null)
     {
-        return Mage::helper('open_gallery')->getImageUrl($object, 'thumbnail', $width, $height);
+        if (Open_Gallery_Model_Item::TYPE_IMAGE == $object->getData('type') && !$object->getData('thumbnail')) {
+            $field = 'value';
+        } else {
+            $field = 'thumbnail';
+        }
+
+        return Mage::helper('open_gallery')->getImageUrl($object, $field, $width, $height);
     }
 }
