@@ -1,5 +1,4 @@
 # Magento - Open Gallery Extension
-===========
 
 OpenSource Image and Video Gallery Extension for Magento Commerce
 
@@ -8,7 +7,7 @@ OpenSource Image and Video Gallery Extension for Magento Commerce
 * Video galleries
 * Mixed (Images and Video) galleries
 
-### Video Item Features
+### Video Item Features:
 * Youtube support
 * Embed code support
 * Upload file support
