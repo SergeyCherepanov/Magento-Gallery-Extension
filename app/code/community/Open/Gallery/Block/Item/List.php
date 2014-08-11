@@ -11,14 +11,6 @@ class Open_Gallery_Block_Item_List
     protected $_itemCollection;
 
     /**
-     * @return Open_Gallery_Model_Category
-     */
-    public function getCategory()
-    {
-        return Mage::registry('gallery_category');
-    }
-
-    /**
      * @return Open_Gallery_Model_Resource_Item_Collection
      */
     public function getItemCollection()

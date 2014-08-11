@@ -7,5 +7,17 @@
 class Open_Gallery_Block_Home
     extends Open_Gallery_Block_Category_List
 {
+    /**
+     * @return $this
+     */
+    protected function _beforeToHtml()
+    {
+        parent::_beforeToHtml();
 
+        if (!$this->_template) {
+            $this->_template = 'open/gallery/home.phtml';
+        }
+
+        return $this;
+    }
 }

@@ -7,6 +7,49 @@
 abstract class Open_Gallery_Block_Abstract
     extends Mage_Core_Block_Template
 {
+    /** @var  Open_Gallery_Model_Category|null */
+    protected $_category;
+
+    protected function _prepareLayout()
+    {
+        $handles = $this->getLayout()->getUpdate()->getHandles();
+
+        if (!in_array('open_gallery_scripts', $handles)) {
+            $this->getLayout()->getUpdate()->addHandle('open_gallery_scripts');
+        }
+
+        parent::_prepareLayout();
+    }
+
+    /**
+     * @param Open_Gallery_Model_Category $category
+     */
+    public function setCategory(Open_Gallery_Model_Category $category)
+    {
+        $this->_category = $category;
+    }
+
+    /**
+     * @return Open_Gallery_Model_Category
+     * @throws Open_Gallery_Exception
+     */
+    public function getCategory()
+    {
+        if (!$this->_category) {
+            if ($this->getData('category_id')) {
+                $this->_category = Mage::getModel('open_gallery/category')->load($this->getData('category_id'));
+            } else {
+                $this->_category = Mage::registry('gallery_category');
+            }
+
+            if (!$this->_category instanceof Open_Gallery_Model_Category) {
+                $this->_category = Mage::getModel('open_gallery/category');
+            }
+        }
+
+        return $this->_category;
+    }
+
     /**
      * @param Open_Gallery_Model_Category $category
      * @return string
