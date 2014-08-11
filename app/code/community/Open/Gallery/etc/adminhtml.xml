@@ -29,6 +29,17 @@
                             </open_gallery>
                         </children>
                     </cms>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <open_gallery translate="title" module="open_gallery">
+                                        <title>Gallery Settings</title>
+                                    </open_gallery>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
                 </children>
             </admin>
         </resources>

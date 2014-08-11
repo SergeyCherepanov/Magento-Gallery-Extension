@@ -6,6 +6,9 @@
 
 /** @var Open_Gallery_Block_Home $this */
 $categoryCollection = $this->getCategoryCollection();
+$helper             = Mage::helper('open_gallery');
+$imageWidth         = $helper->getCategoryListImageWidth();
+$imageHeight        = $helper->getCategoryListImageHeight();
 ?>
 <h1><?php echo $this->__('Open Gallery')?></h1>
 <h3><?php echo $this->__('Available Categories')?></h3>
@@ -13,8 +16,12 @@ $categoryCollection = $this->getCategoryCollection();
     <?php foreach ($categoryCollection as $category):
     /** @var Open_Gallery_Model_Category $category */ ?>
     <li>
-        <img width="64" src="<?php echo $this->getThumbnailUrl($category)?>" alt="<?php echo $category->getTitle();?>" />
-        <a href="<?php echo $this->getCategoryUrl($category)?>"><?php echo $category->getTitle();?></a>
+        <a href="<?php echo $this->getCategoryUrl($category)?>">
+            <img width="<?php echo $imageWidth;?>" height="<?php echo $imageHeight;?>" src="<?php echo $this->getThumbnailUrl($category)?>" alt="<?php echo $category->getTitle();?>" />
+        </a>
+        <a href="<?php echo $this->getCategoryUrl($category)?>">
+            <span><?php echo $category->getTitle();?></span>
+        </a>
     </li>
     <?php endforeach;?>
 </ul>

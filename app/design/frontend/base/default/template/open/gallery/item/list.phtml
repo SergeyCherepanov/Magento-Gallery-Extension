@@ -6,16 +6,21 @@
 
 /** @var Open_Gallery_Block_Item_List $this */
 /** @var Open_Gallery_Model_Category $item */
-$item = $this->getCategory();
+$item           = $this->getCategory();
 /** @var Open_Gallery_Model_Resource_Item_Collection $itemCollection */
 $itemCollection = $this->getItemCollection();
+$helper         = Mage::helper('open_gallery');
+$imageWidth     = $helper->getListImageWidth();
+$imageHeight    = $helper->getListImageHeight();
 ?>
 <h1><?php echo $item->getTitle();?></h1>
 <ul class="gallery-item-list">
     <?php foreach ($itemCollection as $item):
         /** @var Open_Gallery_Model_Item $item */ ?>
         <li class="gallery-item">
-            <a href="<?php echo $this->getItemBoxUrl($item, 640);?>" class="gallery-box"><img width="64" src="<?php echo $this->getThumbnailUrl($item)?>" alt="<?php echo $item->getTitle();?>" /></a>
+            <a href="<?php echo $this->getItemBoxUrl($item);?>" class="gallery-box">
+                <img width="<?php echo $imageWidth;?>" height="<?php echo $imageHeight;?>" src="<?php echo $this->getThumbnailUrl($item)?>" alt="<?php echo $item->getTitle();?>" />
+            </a>
             <a href="<?php echo $this->getItemUrl($item);?>"><?php echo $item->getTitle();?></a>
         </li>
     <?php endforeach;?>

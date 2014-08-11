@@ -75,7 +75,7 @@ abstract class Open_Gallery_Block_Abstract
      * @param int|null $height
      * @return string
      */
-    public function getThumbnailUrl(Varien_Object $object, $width = 64, $height = null)
+    public function getThumbnailUrl(Varien_Object $object, $width = null, $height = null)
     {
         if (Open_Gallery_Model_Item::TYPE_IMAGE == $object->getData('type') && !$object->getData('thumbnail')) {
             $field = 'value';
@@ -83,7 +83,7 @@ abstract class Open_Gallery_Block_Abstract
             $field = 'thumbnail';
         }
 
-        return Mage::helper('open_gallery')->getImageUrl($object, $field, $width, $height);
+        return Mage::helper('open_gallery')->getThumbnailUrl($object, $field, $width, $height);
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class Open_Gallery_Block_Abstract
     {
         switch ($object->getData('type')) {
             case Open_Gallery_Model_Item::TYPE_IMAGE:
-                return Mage::helper('open_gallery')->getImageUrl($object, 'value', $width, $height);
+                return Mage::helper('open_gallery')->getBoxImageUrl($object, 'value', $width, $height);
                 break;
             default:
                 return $this->getItemUrl($object);
