@@ -13,10 +13,17 @@ OpenSource Image and Video Gallery Extension for Magento Commerce
 * Embed code support
 * Upload file support
 
+### Usage
+
+Gallery home page
+```html
+http://sitename.com/gallery
+```
+
 ### Cms Block/Page Usage
 For add gallery to cms page or static block, use placeholders:
 
-List all categories
+List of all categories
 ```html
 {{block type="open_gallery/home"}}
 ```
