@@ -14,14 +14,16 @@ $imageWidth     = $helper->getListImageWidth();
 $imageHeight    = $helper->getListImageHeight();
 ?>
 <h1><?php echo $item->getTitle();?></h1>
-<ul class="gallery-item-list">
+<ul class="gallery-list gallery-item-list">
     <?php foreach ($itemCollection as $item):
         /** @var Open_Gallery_Model_Item $item */ ?>
         <li class="gallery-item">
-            <a href="<?php echo $this->getItemBoxUrl($item);?>" class="gallery-box">
+            <a href="<?php echo $this->getItemBoxUrl($item);?>" class="gallery-image gallery-box">
                 <img width="<?php echo $imageWidth;?>" height="<?php echo $imageHeight;?>" src="<?php echo $this->getThumbnailUrl($item)?>" alt="<?php echo $item->getTitle();?>" />
             </a>
-            <a href="<?php echo $this->getItemUrl($item);?>"><?php echo $item->getTitle();?></a>
+            <a class="gallery-title" href="<?php echo $this->getItemUrl($item);?>">
+                <span><?php echo $item->getTitle();?></span>
+            </a>
         </li>
     <?php endforeach;?>
 </ul>

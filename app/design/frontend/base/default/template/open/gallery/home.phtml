@@ -12,14 +12,14 @@ $imageHeight        = $helper->getCategoryListImageHeight();
 ?>
 <h1><?php echo $this->__('Open Gallery')?></h1>
 <h3><?php echo $this->__('Available Categories')?></h3>
-<ul>
+<ul class="gallery-list gallery-category-list">
     <?php foreach ($categoryCollection as $category):
     /** @var Open_Gallery_Model_Category $category */ ?>
-    <li>
-        <a href="<?php echo $this->getCategoryUrl($category)?>">
+    <li class="gallery-item">
+        <a class="gallery-image" href="<?php echo $this->getCategoryUrl($category)?>">
             <img width="<?php echo $imageWidth;?>" height="<?php echo $imageHeight;?>" src="<?php echo $this->getThumbnailUrl($category)?>" alt="<?php echo $category->getTitle();?>" />
         </a>
-        <a href="<?php echo $this->getCategoryUrl($category)?>">
+        <a class="gallery-title" href="<?php echo $this->getCategoryUrl($category)?>">
             <span><?php echo $category->getTitle();?></span>
         </a>
     </li>

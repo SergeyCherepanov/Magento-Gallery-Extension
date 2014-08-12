@@ -9,9 +9,18 @@
     <default>
         <reference name="head">
             <block type="open_gallery/scripts" name="gallery_scripts" template="open/gallery/scripts.phtml"/>
-            <action method="addItem"><type>js_css</type><name>open/lib/jquery/colorbox/colorbox.css</name></action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>open/lib/jquery/colorbox/colorbox.css</name>
+            </action>
+            <action method="addCss">
+                <name>css/open/gallery.css</name>
+            </action>
         </reference>
     </default>
+    <open_gallery>
+        <update handle="page_one_column" />
+    </open_gallery>
 
     <open_gallery_index_index>
         <reference name="content">
