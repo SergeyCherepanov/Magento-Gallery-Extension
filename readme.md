@@ -23,7 +23,7 @@ http://sitename.com/gallery
 ```
 
 ### Cms Block/Page Usage
-For add gallery to cms page or static block, use placeholders:
+If you want add gallery to cms page or static block, use placeholders:
 
 List of all categories
 ```html
