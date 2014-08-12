@@ -3,9 +3,9 @@
 OpenSource Image and Video Gallery Extension for Magento Commerce
 
 ### Features:
-* Image galleries
-* Video galleries
-* Mixed (Images and Video) galleries
+* Image gallery
+* Video gallery
+* Mixed (Images and Video) gallery
 * ColorBox on frontend with ajax loading
 
 ### Video Item Features:
