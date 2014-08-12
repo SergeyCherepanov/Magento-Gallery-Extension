@@ -1,3 +1,8 @@
+/**
+ * @copyright Copyright (c) 2014 Sergey Cherepanov (sergey@cherepanov.org.ua)
+ * @license Creative Commons Attribution 3.0 License
+ */
+
 require.config({
     "baseUrl": requireJsBaseUrl,
     "paths": {
