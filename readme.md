@@ -13,6 +13,8 @@ OpenSource Image and Video Gallery Extension for Magento Commerce
 * Embed code support
 * Upload file support
 
+Frontend Demo: http://gallery.openmagento.com/gallery
+
 ### Usage
 
 Gallery home page
