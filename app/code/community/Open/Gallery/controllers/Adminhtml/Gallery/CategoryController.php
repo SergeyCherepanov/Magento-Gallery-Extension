@@ -93,12 +93,8 @@ class Open_Gallery_Adminhtml_Gallery_CategoryController
                 unset($data['id']);
             }
             if (isset($data['thumbnail'], $data['thumbnail']['delete']) && !empty($data['thumbnail']['delete'])) {
-                try {
-                    $model->setData('thumbnail', '');
-                    $model->deleteThumbnail();
-                } catch (Open_Gallery_Exception $e) {
-                    // Ignore
-                }
+                $model->setData('thumbnail', '');
+                $model->deleteThumbnail();
             } else if(
                 isset($_FILES['category']['tmp_name']['thumbnail'])
                 && $_FILES['category']['tmp_name']['thumbnail']
@@ -128,11 +124,8 @@ class Open_Gallery_Adminhtml_Gallery_CategoryController
                 $this->_getSession()->addError($message);
             }
             $this->_redirectReferer();
-        } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-            $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addException($e, $this->__('Something went wrong...'));
+            $this->_getSession()->addError($e->getMessage());
             $this->_redirectReferer();
         }
     }

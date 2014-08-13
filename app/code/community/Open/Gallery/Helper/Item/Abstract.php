@@ -54,6 +54,7 @@ abstract class Open_Gallery_Helper_Item_Abstract
     {
         $data = $controller->getRequest()->getPost('item');
         if (isset($data['thumbnail'], $data['thumbnail']['delete']) && !empty($data['thumbnail']['delete'])) {
+            $item->setData('thumbnail', '');
             $item->deleteThumbnail();
         } else if (
             isset($_FILES['item']['tmp_name']['thumbnail'])

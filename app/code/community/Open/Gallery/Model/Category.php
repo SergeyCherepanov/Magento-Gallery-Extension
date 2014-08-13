@@ -125,9 +125,11 @@ class Open_Gallery_Model_Category
             unlink($path);
             $this->setData($fieldName, '');
         } else {
-            /** @var $helper Open_Gallery_Helper_Data */
-            $helper = Mage::helper('open_gallery');
-            throw new Open_Gallery_Exception($helper->__("Can't delete file '%s'", $path));
+            if (is_file($path)) {
+                /** @var $helper Open_Gallery_Helper_Data */
+                $helper = Mage::helper('open_gallery');
+                throw new Open_Gallery_Exception($helper->__("Can't delete file '%s'", $path));
+            }
         }
         return $this;
     }
