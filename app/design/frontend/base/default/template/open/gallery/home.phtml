@@ -12,7 +12,6 @@ $imageHeight        = $helper->getCategoryListImageHeight();
 $columnCount        = $this->hasData('column_count') ? $this->getData('column_count') : 4;
 ?>
 <h1><?php echo $this->__('Open Gallery')?></h1>
-<h3><?php echo $this->__('Available Categories')?></h3>
 <ul class="gallery-list gallery-category-list">
     <?php $i = 0; foreach ($categoryCollection as $category):
     /** @var Open_Gallery_Model_Category $category */ ?>
