@@ -12,6 +12,7 @@ OpenSource Image and Video Gallery Extension for Magento Commerce
 * Youtube support
 * Embed code support
 * Upload file support
+* Automatic downloading thumbnails for youtube items
 
 Frontend Demo: http://gallery.openmagento.com/gallery
 
