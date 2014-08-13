@@ -18,7 +18,7 @@ $columnCount    = $this->hasData('column_count') ? $this->getData('column_count'
 <ul class="gallery-list gallery-item-list">
     <?php $i = 0; foreach ($itemCollection as $item):
         /** @var Open_Gallery_Model_Item $item */ ?>
-    <?php if($i && 0 == $i++%$columnCount):?>
+    <?php if(++$i && !($i%($columnCount+1))):?>
 </ul>
 <ul class="gallery-list gallery-item-list">
     <?php endif;?>
