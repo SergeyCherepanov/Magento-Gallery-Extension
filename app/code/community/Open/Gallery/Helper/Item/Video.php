@@ -62,12 +62,13 @@ class Open_Gallery_Helper_Item_Video
     public function getYouTubeImage($value, $forceDownload = false)
     {
         $baseDir   = Mage::getBaseDir('media');
-        $localDir  = 'video' . DS . 'youtube';
+        $localDir = 'gallery' . DS . 'data' . DS . 'thumbnail';
         if (is_dir($localDir)) {
             mkdir($localDir, 0777, true);
         }
-        $fileName  = $value . '-0.jpg';
-        $absPath = $baseDir . DS . $localDir  . DS . $fileName;
+
+        $fileName = Varien_File_Uploader::getNewFileName($baseDir . DS . $localDir  . DS . $value . '.jpg');
+        $absPath  = $baseDir . DS . $localDir  . DS . $fileName;
 
         if ($forceDownload || !is_file($absPath)) {
             try {
@@ -318,6 +319,11 @@ class Open_Gallery_Helper_Item_Video
                 if (array_key_exists('value_youtube', $additional)) {
                     $item->setData('value', $additional['value_youtube']);
                 }
+
+                if (!$item->getData('thumbnail')) {
+                    $item->setData('thumbnail', $this->getYouTubeImage($item->getData('value')));
+                }
+
                 break;
 
         }
