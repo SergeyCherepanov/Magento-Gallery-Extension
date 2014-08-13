@@ -75,6 +75,9 @@ class Open_Gallery_Helper_Item_Video
                 $url       = sprintf('http://img.youtube.com/vi/%s/0.jpg', $value);
                 $client    = new Zend_Http_Client($url);
                 $response  = $client->request(Zend_Http_Client::GET);
+                if (200 != $response->getStatus())  {
+                    Mage::throwException("Can't download youtube thumbnail");
+                }
                 if (!is_dir($baseDir . DS . $localDir)) {
                     mkdir($baseDir . DS . $localDir, 0777, true);
                 }
