@@ -9,12 +9,17 @@ $categoryCollection = $this->getCategoryCollection();
 $helper             = Mage::helper('open_gallery');
 $imageWidth         = $helper->getCategoryListImageWidth();
 $imageHeight        = $helper->getCategoryListImageHeight();
+$columnCount        = $this->hasData('column_count') ? $this->getData('column_count') : 4;
 ?>
 <h1><?php echo $this->__('Open Gallery')?></h1>
 <h3><?php echo $this->__('Available Categories')?></h3>
 <ul class="gallery-list gallery-category-list">
-    <?php foreach ($categoryCollection as $category):
+    <?php $i = 0; foreach ($categoryCollection as $category):
     /** @var Open_Gallery_Model_Category $category */ ?>
+    <?php if(++$i > $columnCount):?>
+</ul>
+<ul class="gallery-list gallery-category-list">
+    <?php endif;?>
     <li class="gallery-item">
         <a class="gallery-image" href="<?php echo $this->getCategoryUrl($category)?>">
             <img width="<?php echo $imageWidth;?>" height="<?php echo $imageHeight;?>" src="<?php echo $this->getThumbnailUrl($category)?>" alt="<?php echo $category->getTitle();?>" />
