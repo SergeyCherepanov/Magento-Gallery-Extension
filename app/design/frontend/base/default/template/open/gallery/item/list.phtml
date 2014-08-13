@@ -18,9 +18,8 @@ $columnCount    = $this->hasData('column_count') ? $this->getData('column_count'
 <ul class="gallery-list gallery-item-list">
     <?php $i = 0; foreach ($itemCollection as $item):
         /** @var Open_Gallery_Model_Item $item */ ?>
-    <?php if(++$i && !($i%($columnCount+1))):?>
-</ul>
-<ul class="gallery-list gallery-item-list">
+    <?php if($i && 0 == $i%$columnCount):?>
+    </ul><ul class="gallery-list gallery-item-list">
     <?php endif;?>
         <li class="gallery-item">
             <a href="<?php echo $this->getItemBoxUrl($item);?>" class="gallery-image gallery-box">
@@ -30,5 +29,5 @@ $columnCount    = $this->hasData('column_count') ? $this->getData('column_count'
                 <span><?php echo $item->getTitle();?></span>
             </a>
         </li>
-    <?php endforeach;?>
+    <?php $i++; endforeach;?>
 </ul>
