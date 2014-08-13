@@ -93,8 +93,8 @@ class Open_Gallery_Adminhtml_Gallery_CategoryController
                 unset($data['id']);
             }
             if (isset($data['thumbnail'], $data['thumbnail']['delete']) && !empty($data['thumbnail']['delete'])) {
-                $model->setData('thumbnail', '');
                 $model->deleteThumbnail();
+                $model->setData('thumbnail', '');
             } else if(
                 isset($_FILES['category']['tmp_name']['thumbnail'])
                 && $_FILES['category']['tmp_name']['thumbnail']
