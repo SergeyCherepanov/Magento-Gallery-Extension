@@ -84,6 +84,7 @@ class Open_Gallery_Helper_Item_Video
                 file_put_contents($absPath, $response->getBody());
             } catch (Exception $e) {
                 Mage::logException($e);
+                return false;
             }
         }
 
@@ -324,7 +325,9 @@ class Open_Gallery_Helper_Item_Video
                 }
 
                 if (!$item->getData('thumbnail')) {
-                    $item->setData('thumbnail', $this->getYouTubeImage($item->getData('value')));
+                    if ($thumbnail = $this->getYouTubeImage($item->getData('value'))) {
+                        $item->setData('thumbnail', $thumbnail);
+                    }
                 }
 
                 break;
